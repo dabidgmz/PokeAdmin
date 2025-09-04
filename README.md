@@ -1,59 +1,110 @@
-# PokeAdmin
+# Profesor Ox Panel
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
+Panel Administrativo para PokeTrainer PWA desarrollado con Angular 20.
 
-## Development server
+## 🚀 Características
 
-To start a local development server, run:
+- **Autenticación con 2FA**: Login con verificación de código OTP
+- **Dashboard**: Resumen del sistema con métricas
+- **Gestión de Entrenadores**: Lista, filtros y acciones administrativas
+- **Historial de Capturas**: Visualización y exportación de datos
+- **QR Manager**: Generación de códigos QR para Pokémon
+- **Configuración**: Ajustes del sistema y tema oscuro
 
-```bash
-ng serve
-```
+## 🛠️ Tecnologías
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 20 (Standalone Components)
+- Angular Material
+- Tailwind CSS
+- TypeScript
+- RxJS
 
-## Code scaffolding
+## 📦 Instalación
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Requisitos
+- Node.js 20+
+- npm
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Comandos
 
 ```bash
-ng build
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm start
+
+# Construir para producción
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔐 Autenticación Demo
 
-## Running unit tests
+### Login
+- **Email**: Cualquier correo que termine en `@utt.edu.mx`
+- **Contraseña**: Mínimo 4 caracteres
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### 2FA
+- **Código**: `123456`
 
-```bash
-ng test
+## 🎨 Tema
+
+El panel incluye soporte para tema claro y oscuro. Puedes cambiar el tema desde la página de Ajustes.
+
+## 📱 Responsive
+
+La aplicación es completamente responsive y se adapta a diferentes tamaños de pantalla.
+
+## 🔧 Estructura del Proyecto
+
+```
+src/
+├── app/
+│   ├── core/           # Servicios, guards, interceptores
+│   ├── layout/         # Layouts de autenticación y admin
+│   ├── pages/          # Páginas principales
+│   ├── shared/         # Componentes compartidos
+│   └── app.routes.ts   # Configuración de rutas
+├── styles.css          # Estilos globales con Tailwind
+└── main.ts            # Punto de entrada
 ```
 
-## Running end-to-end tests
+## 🚦 Rutas
 
-For end-to-end (e2e) testing, run:
+- `/auth/login` - Página de login
+- `/auth/2fa` - Verificación 2FA
+- `/dashboard` - Dashboard principal
+- `/trainers` - Gestión de entrenadores
+- `/captures` - Historial de capturas
+- `/qr-manager` - Generador de QR
+- `/settings` - Configuración
 
-```bash
-ng e2e
-```
+## 📊 Datos Mock
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+La aplicación utiliza datos mock almacenados en memoria para demostrar la funcionalidad:
 
-## Additional Resources
+- **Entrenadores**: Lista de entrenadores de ejemplo
+- **Capturas**: Historial de capturas simulado
+- **Métricas**: Estadísticas del dashboard
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🔒 Seguridad
+
+- Guards de autenticación y autorización
+- Interceptor para tokens de autorización
+- Almacenamiento seguro en localStorage
+- Validación de formularios
+
+## 🎯 Próximas Características
+
+- Integración con backend real
+- Notificaciones push
+- Reportes avanzados
+- Gestión de usuarios
+- API de Pokémon real
+
+## 📝 Notas de Desarrollo
+
+- Todos los componentes son standalone
+- Uso de lazy loading para optimización
+- Implementación de Material Design
+- Soporte completo para PWA
