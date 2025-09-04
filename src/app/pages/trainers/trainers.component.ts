@@ -49,12 +49,12 @@ import { Trainer } from '../../core/models/trainer';
           
           <div class="flex items-center space-x-4">
             <div class="text-center">
-              <p class="text-2xl font-bold text-gray-800">{{ dataSource.data.length }}</p>
-              <p class="text-sm text-gray-600">Total</p>
+              <p class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ dataSource.data.length }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300">Total</p>
             </div>
             <div class="text-center">
-              <p class="text-2xl font-bold text-green-600">{{ activeTrainers }}</p>
-              <p class="text-sm text-gray-600">Activos</p>
+              <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ activeTrainers }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300">Activos</p>
             </div>
           </div>
         </div>

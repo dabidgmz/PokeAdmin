@@ -22,8 +22,8 @@ import { UserService } from '../../core/services/user.service';
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Total Trainers -->
-        <div class="gradient-card p-6 text-white">
-          <div class="flex items-center justify-between">
+        <div class="p-6 rounded-2xl" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);">
+          <div class="flex items-center justify-between text-white">
             <div>
               <h3 class="text-3xl font-bold">{{ totalTrainers }}</h3>
               <p class="text-white text-opacity-90">Total Entrenadores</p>

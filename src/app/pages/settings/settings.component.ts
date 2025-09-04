@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { ToastService } from '../../core/services/toast.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { storage } from '../../core/utils/storage';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -40,17 +42,35 @@ import { storage } from '../../core/utils/storage';
         
         <div class="flex items-center justify-between p-4 bg-white bg-opacity-50 rounded-xl">
           <div class="flex items-center space-x-4">
-            <mat-icon class="text-gray-500">dark_mode</mat-icon>
+            <mat-icon [class]="isDarkTheme ? 'text-yellow-500' : 'text-gray-500'">
+              {{ isDarkTheme ? 'dark_mode' : 'light_mode' }}
+            </mat-icon>
             <div>
-              <h4 class="font-medium text-gray-800">Tema Oscuro</h4>
+              <h4 class="font-medium text-gray-800">Modo Oscuro</h4>
               <p class="text-sm text-gray-600">Cambiar entre tema claro y oscuro</p>
             </div>
           </div>
-          <mat-slide-toggle 
-            [checked]="isDarkTheme" 
-            (change)="toggleTheme($event.checked)"
-            class="scale-125"
-          ></mat-slide-toggle>
+          <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2">
+              <span class="text-sm font-medium text-gray-600" [class]="!isDarkTheme ? 'text-blue-600 font-bold' : ''">
+                Claro
+              </span>
+              <button 
+                (click)="toggleTheme()"
+                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                [class]="isDarkTheme ? 'bg-blue-600' : 'bg-gray-200'"
+                [attr.aria-label]="isDarkTheme ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+              >
+                <span 
+                  class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm"
+                  [class]="isDarkTheme ? 'translate-x-6' : 'translate-x-1'"
+                ></span>
+              </button>
+              <span class="text-sm font-medium text-gray-600" [class]="isDarkTheme ? 'text-blue-600 font-bold' : ''">
+                Oscuro
+              </span>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -166,27 +186,33 @@ import { storage } from '../../core/utils/storage';
     </div>
   `
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   isDarkTheme = false;
   lastUpdate = new Date().toLocaleDateString();
+  private themeSubscription?: Subscription;
 
-  constructor(private toastService: ToastService) {}
+  constructor(
+    private toastService: ToastService,
+    private themeService: ThemeService
+  ) {}
 
   ngOnInit() {
-    // Check if dark theme is enabled
-    this.isDarkTheme = document.documentElement.classList.contains('dark');
+    // Subscribe to theme changes
+    this.themeSubscription = this.themeService.isDarkTheme$.subscribe(isDark => {
+      this.isDarkTheme = isDark;
+    });
   }
 
-  toggleTheme(checked: boolean) {
-    this.isDarkTheme = checked;
-    if (checked) {
-      document.documentElement.classList.add('dark');
-      storage.set('darkTheme', true);
-    } else {
-      document.documentElement.classList.remove('dark');
-      storage.set('darkTheme', false);
+  ngOnDestroy() {
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
     }
-    this.toastService.success(`Tema ${checked ? 'oscuro' : 'claro'} activado`);
+  }
+
+  toggleTheme() {
+    const newTheme = !this.isDarkTheme;
+    this.themeService.setTheme(newTheme);
+    this.toastService.success(`Tema ${newTheme ? 'oscuro' : 'claro'} activado`);
   }
 
   clearCache() {

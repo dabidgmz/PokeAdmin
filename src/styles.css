@@ -1015,3 +1015,185 @@ body {
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
 }
+
+/* Dark Theme Styles */
+.dark {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3a3a3a;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #888888;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+.dark body {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark .glass-card {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color) !important;
+}
+
+.dark .gradient-card {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: var(--text-primary) !important;
+}
+
+.dark p, .dark span, .dark div {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-600, .dark .text-gray-700, .dark .text-gray-800 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+.dark .bg-white {
+  background: var(--bg-secondary) !important;
+}
+
+.dark .bg-gray-50 {
+  background: var(--bg-tertiary) !important;
+}
+
+.dark .border-gray-200, .dark .border-gray-300 {
+  border-color: var(--border-color) !important;
+}
+
+/* Dark theme for Material components */
+.dark .mat-mdc-text-field-wrapper {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark .mat-mdc-text-field-wrapper input {
+  color: var(--text-primary) !important;
+}
+
+.dark .mat-mdc-text-field-wrapper input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.dark .mat-mdc-text-field-wrapper .mat-mdc-floating-label {
+  color: var(--text-secondary) !important;
+}
+
+.dark .mat-mdc-text-field-wrapper .mat-mdc-floating-label.mdc-floating-label--float-above {
+  color: #3b82f6 !important;
+}
+
+.dark .mat-mdc-card {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark .mat-mdc-table {
+  background: var(--bg-secondary) !important;
+}
+
+.dark .mat-mdc-header-row {
+  background: var(--bg-tertiary) !important;
+}
+
+.dark .mat-mdc-header-cell {
+  color: var(--text-primary) !important;
+}
+
+.dark .mat-mdc-cell {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+.dark .mat-mdc-row:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.dark .mat-mdc-paginator {
+  background: var(--bg-tertiary) !important;
+  border-top-color: var(--border-color) !important;
+}
+
+.dark .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+.dark .mat-mdc-paginator .mat-mdc-paginator-range-label {
+  color: var(--text-secondary) !important;
+}
+
+/* Dark theme for Flatpickr */
+.dark .flatpickr-calendar {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark .flatpickr-weekdays {
+  background: var(--bg-tertiary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+.dark .flatpickr-weekday {
+  color: var(--text-secondary) !important;
+}
+
+.dark .flatpickr-day {
+  color: var(--text-primary) !important;
+}
+
+.dark .flatpickr-day:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.dark .flatpickr-day.disabled {
+  color: var(--text-muted) !important;
+  background: var(--bg-primary) !important;
+}
+
+.dark .flatpickr-input {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark .flatpickr-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Dark theme for sidebar */
+.dark .mat-sidenav {
+  background: var(--bg-secondary) !important;
+  border-right-color: var(--border-color) !important;
+}
+
+.dark .mat-toolbar {
+  background: var(--bg-secondary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+.dark .mat-sidenav-content {
+  background: var(--bg-primary) !important;
+}
+
+/* Dark theme for navigation links */
+.dark .nav-link {
+  color: var(--text-secondary) !important;
+}
+
+.dark .nav-link:hover {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark .nav-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}

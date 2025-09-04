@@ -91,7 +91,7 @@ import { User } from '../core/models/auth';
               <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <mat-icon class="text-white text-sm">person</mat-icon>
               </div>
-              <span class="text-sm font-medium text-gray-700">{{ user?.name }}</span>
+              <span class="text-sm font-medium text-gray-700">{{ user.name }}</span>
             </div>
             
             <button mat-icon-button [matMenuTriggerFor]="userMenu" class="bg-gray-50 rounded-full">
