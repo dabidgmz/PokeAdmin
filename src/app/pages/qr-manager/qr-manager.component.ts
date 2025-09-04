@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { Rarity } from '../../core/models/capture';
+import * as QRCode from 'qrcode';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-qr-manager',
@@ -95,8 +97,8 @@ import { Rarity } from '../../core/models/capture';
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div *ngFor="let qr of generatedQRs" class="glass-card p-4 hover:scale-105 transition-transform duration-300">
             <div class="text-center">
-              <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl mx-auto mb-3 flex items-center justify-center shadow-lg">
-                <mat-icon class="text-4xl text-gray-500">qr_code</mat-icon>
+              <div class="w-24 h-24 bg-white rounded-xl mx-auto mb-3 flex items-center justify-center shadow-lg border-2 border-gray-200">
+                <img [src]="qr.qrCodeDataUrl" [alt]="'QR Code for ' + qr.name" class="w-20 h-20">
               </div>
               <h4 class="font-semibold text-gray-800 mb-1">{{ qr.name }}</h4>
               <p class="text-sm text-gray-600 mb-2">ID: {{ qr.id }}</p>
@@ -128,47 +130,116 @@ export class QrManagerComponent {
     });
   }
 
-  generateQRs() {
+  async generateQRs() {
     if (this.qrForm.valid) {
       const { minId, maxId, rarity } = this.qrForm.value;
       this.generatedQRs = [];
       
       for (let id = minId; id <= maxId; id++) {
-        this.generatedQRs.push({
+        const pokemonData = {
           id,
           name: `Pokémon ${id}`,
-          rarity
-        });
+          rarity,
+          timestamp: new Date().toISOString()
+        };
+        
+        try {
+          // Generate QR code data URL
+          const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(pokemonData), {
+            width: 200,
+            margin: 2,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF'
+            }
+          });
+          
+          this.generatedQRs.push({
+            ...pokemonData,
+            qrCodeDataUrl
+          });
+        } catch (error) {
+          console.error('Error generating QR code:', error);
+        }
       }
     }
   }
 
-  exportPDF() {
-    // Mock PDF export - in real implementation, use jsPDF or similar
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      printWindow.document.write(`
-        <html>
-          <head><title>QR Codes - ${new Date().toLocaleDateString()}</title></head>
-          <body>
-            <h1>Códigos QR Generados</h1>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-              ${this.generatedQRs.map(qr => `
-                <div style="border: 1px solid #ccc; padding: 16px; text-align: center;">
-                  <div style="width: 100px; height: 100px; background: #f0f0f0; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;">
-                    QR Code
-                  </div>
-                  <h3>${qr.name}</h3>
-                  <p>ID: ${qr.id}</p>
-                  <span style="background: #e0e0e0; padding: 4px 8px; border-radius: 12px; font-size: 12px;">${qr.rarity}</span>
-                </div>
-              `).join('')}
-            </div>
-          </body>
-        </html>
-      `);
-      printWindow.document.close();
-      printWindow.print();
+  async exportPDF() {
+    if (this.generatedQRs.length === 0) {
+      alert('No hay códigos QR para exportar');
+      return;
+    }
+
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      const qrSize = 40; // Size of QR code in mm
+      const spacing = 5; // Space between elements
+      
+      let x = margin;
+      let y = margin;
+      let itemsPerRow = 4;
+      let currentRow = 0;
+      
+      // Add title
+      pdf.setFontSize(20);
+      pdf.text('Códigos QR Pokémon', pageWidth / 2, y, { align: 'center' });
+      y += 15;
+      
+      // Add date
+      pdf.setFontSize(10);
+      pdf.text(`Generado el: ${new Date().toLocaleDateString()}`, pageWidth / 2, y, { align: 'center' });
+      y += 10;
+      
+      // Process QR codes one by one to ensure images are loaded
+      for (let i = 0; i < this.generatedQRs.length; i++) {
+        const qr = this.generatedQRs[i];
+        
+        // Check if we need a new page
+        if (y + qrSize + 20 > pageHeight - margin) {
+          pdf.addPage();
+          y = margin;
+          currentRow = 0;
+        }
+        
+        // Calculate position
+        x = margin + (currentRow * (qrSize + spacing + 30));
+        
+        // Wait for image to load and add to PDF
+        await new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            pdf.addImage(img, 'PNG', x, y, qrSize, qrSize);
+            
+            // Add text below QR code
+            pdf.setFontSize(8);
+            pdf.text(qr.name, x + qrSize/2, y + qrSize + 5, { align: 'center' });
+            pdf.text(`ID: ${qr.id}`, x + qrSize/2, y + qrSize + 8, { align: 'center' });
+            pdf.text(qr.rarity.toUpperCase(), x + qrSize/2, y + qrSize + 11, { align: 'center' });
+            
+            resolve();
+          };
+          img.src = qr.qrCodeDataUrl;
+        });
+        
+        currentRow++;
+        
+        // Move to next row if needed
+        if (currentRow >= itemsPerRow) {
+          currentRow = 0;
+          y += qrSize + 20;
+        }
+      }
+      
+      // Save the PDF
+      pdf.save(`pokemon-qr-codes-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error al generar el PDF. Inténtalo de nuevo.');
     }
   }
 }
